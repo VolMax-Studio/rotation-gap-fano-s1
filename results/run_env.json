@@ -1,0 +1,9 @@
+{
+  "archive_path": "/home/volmax-studio/volmax-projects/iot2/PORTFOLIO/rotation-gap-fano-s1/archive/google_105Q_surface_code_d3_d5_d7.zip",
+  "executed_at_utc": "2026-09-04T18:10:07.141171+00:00",
+  "note": "Excluded from the Sec.6 determinism diff by design.",
+  "numpy": "2.5.2",
+  "platform": "Linux-7.0.0-28-generic-x86_64-with-glibc2.39",
+  "python": "3.12.3",
+  "scipy": "1.18.1"
+}
