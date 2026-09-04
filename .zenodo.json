@@ -1,0 +1,24 @@
+{
+  "title": "rotation-gap-fano-s1: pre-registered reproduction of Fano-factor results in arXiv:2604.11963 from Google Willow detector telemetry",
+  "upload_type": "software",
+  "license": "MIT",
+  "creators": [
+    {
+      "name": "Nestorov, Ivan",
+      "affiliation": "VolMax Studio Lab",
+      "orcid": "0009-0006-7940-9539"
+    }
+  ],
+  "related_identifiers": [
+    {
+      "relation": "isSupplementTo",
+      "identifier": "arXiv:2604.11963",
+      "scheme": "arxiv"
+    },
+    {
+      "relation": "isDerivedFrom",
+      "identifier": "10.5281/zenodo.13273331",
+      "scheme": "doi"
+    }
+  ]
+}
