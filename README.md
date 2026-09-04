@@ -1,6 +1,7 @@
 # Rotation Gap Willow Fano Factor Audit (`rotation-gap-fano-s1`)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22309777.svg)](https://doi.org/10.5281/zenodo.22309777)
 [![Source Dataset DOI](https://img.shields.io/badge/Source%20Dataset%20DOI-10.5281%2Fzenodo.13273331-blue)](https://doi.org/10.5281/zenodo.13273331)
 
 Pre-registered independent baseline audit and mathematical reproduction of the syndrome noise Fano factor analysis published by Selina Stenberg (*The Rotation Gap Is Not An Error*, arXiv:2604.11963v1, Section II F & Table III) computed from 420 raw surface-code detector telemetry runs in the Google Willow dataset (`10.5281/zenodo.13273331`).
