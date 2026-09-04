@@ -1,6 +1,6 @@
 # Limitations & Epistemic Analysis — `rotation-gap-fano-s1`
 
-> **Document Status:** SPREMNO ZA GEJT (Draft — not ratified)  
+> **Document Status:** Ratified (Merged to `main` by Human Operator via PR #1, 2026-09-04)  
 > **Instance:** `rotation-gap-fano-s1`  
 > **Source Target:** Stenberg (2026), arXiv:2604.11963v1, Section II F & Table III  
 

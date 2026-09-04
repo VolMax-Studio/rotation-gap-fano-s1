@@ -64,6 +64,8 @@ SCOPE TEST (R9/R10) | Aggregate stable under round reweighting (structural zero:
 * **Pre-Registration Commit:** [`ff84608`](https://github.com/VolMax-Studio/rotation-gap-fano-s1/commit/ff84608)
 * **Manifest Verification:** 1260/1260 SHA-256 digests pinned in [`data_manifest.json`](data_manifest.json).
 * **Deterministic Results:** Canonical output recorded in [`results/results.json`](results/results.json).
+* **Human Ratification:** Formally ratified and merged into `main` via PR #1 (Merge Commit [`ccf62f7`](https://github.com/VolMax-Studio/rotation-gap-fano-s1/commit/ccf62f7)).
+* **Note on Frozen Artifacts:** The pre-registration specification (`PREREGISTRATION.md`) is cryptographically SHA-256 pinned at commit `ff84608`, and the harness deterministically regenerates `results.json`. Consequently, the literal status string in those frozen files reflects their pre-execution freeze state (`SPREMNO ZA GEJT`), while binding governance ratification resides in the human PR merge commit on `main`.
 
 ---
 
