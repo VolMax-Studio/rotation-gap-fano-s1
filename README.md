@@ -43,6 +43,19 @@ SCOPE TEST (R9/R10) | Aggregate stable under round reweighting (structural zero:
 ========================================================================================================================
 ```
 
+### Visual Verification & Margin Profiles
+
+<p align="center">
+  <img src="results/plots/verdict_margins.png" width="750" alt="Verdict Margins">
+</p>
+<p align="center"><em>Figure 1: Pre-registered threshold margin consumption across sub-claims (Commit 3c4cf32, N=420). While all four are Verified, W1 and W2 consumed >84% of their admissible band.</em></p>
+
+<p align="center">
+  <img src="results/plots/fano_by_rounds.png" width="750" alt="Fano by Rounds">
+</p>
+<p align="center"><em>Figure 2: Empirical Fano factor vs QEC rounds (N=28 runs/point). Source reported r=1 range [1.65, 1.82] matches our measured 1.6915. Dotted line indicates the exploratory equal-distance mean (2.5618).</em></p>
+
+
 ---
 
 ## 4. Key Findings & Epistemic Boundaries
