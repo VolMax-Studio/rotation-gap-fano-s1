@@ -1,0 +1,267 @@
+{
+  "archive": {
+    "md5": "21fa6ad35b395d838ebcdbc92e364a12",
+    "sha256": "1e8e3b4f5f35ba4fd9b4a8448473f37a7090b404fd6eff0c00188092876070dd",
+    "size_bytes": 5716907033
+  },
+  "data_manifest_sha256": "fd6a127dc52c7edb560da0f4e92cf5ad467638356452fb2b6094525c2dc81266",
+  "estimator_provenance": {
+    "lines": {
+      "anova_across_distances": {
+        "code": "F_stat, p_anova = sp_stats.f_oneway(*groups)   # groups from line 240",
+        "in_frozen_block": false,
+        "line": 242,
+        "note": "W3 estimator. Not present in the Sec.2 code block; introduces a scipy dependency that Sec.2 does not name."
+      },
+      "overall_fano": {
+        "code": "print(f\"\\n  OVERALL: F = {np.mean(all_fanos):.4f} +/- {np.std(all_fanos):.4f}  (N = {len(all_fanos)})\")",
+        "in_frozen_block": true,
+        "line": 97,
+        "note": "PREREG Sec.2 renders line 97 as `F_overall = np.mean(all_fanos)`. The file at line 97 is the print statement above. The operation np.mean(all_fanos) is the same; the quotation is not verbatim."
+      },
+      "overall_se": {
+        "code": "se = np.std(all_fanos) / np.sqrt(len(all_fanos))",
+        "in_frozen_block": true,
+        "line": 93
+      },
+      "per_distance_fano": {
+        "code": "print(f\"    d={d}: {np.mean(fanos):.4f}\")   # fanos from line 235",
+        "in_frozen_block": false,
+        "line": 236,
+        "note": "W2 estimator. Not present in the Sec.2 code block."
+      },
+      "per_experiment_fano": {
+        "code": "fano = var_c / mean_c if mean_c > 0 else np.nan",
+        "in_frozen_block": true,
+        "line": 59
+      },
+      "per_experiment_variance": {
+        "code": "var_c = np.var(counts, ddof=1)",
+        "in_frozen_block": false,
+        "line": 58,
+        "note": "ddof=1 is not stated in the Sec.2 prose restatement; it is the author's operation and is what makes F_i a sample-variance ratio."
+      },
+      "t_vs_poisson": {
+        "code": "t_vs_1 = (np.mean(all_fanos) - 1.0) / se",
+        "in_frozen_block": true,
+        "line": 94
+      }
+    },
+    "popcount_implementation": "vectorised_equivalent",
+    "source": "github.com/SelinaAliens/The_Rotation_Gap_Is_Not_An_Error :: willow/willow_fano_analysis.py (MIT, 245 lines)"
+  },
+  "instance": "rotation-gap-fano-s1",
+  "measurements": {
+    "anova_f_statistic": 59.13372012144687,
+    "anova_p_value": 2.462351990289514e-23,
+    "f_overall": 2.4156874990071255,
+    "n_experiments": 420,
+    "per_distance": {
+      "3": {
+        "mean_fano": 2.294203956386379,
+        "n": 270,
+        "std_fano": 0.3025853140079784
+      },
+      "5": {
+        "mean_fano": 2.59349051333337,
+        "n": 120,
+        "std_fano": 0.3348551991506183
+      },
+      "7": {
+        "mean_fano": 2.7978273252888646,
+        "n": 30,
+        "std_fano": 0.39567053795500334
+      }
+    },
+    "popcount_equivalence_checks": [
+      {
+        "equal": true,
+        "member": "google_105Q_surface_code_d3_d5_d7/d3_at_q10_7/X/r01/detection_events.b8"
+      },
+      {
+        "equal": true,
+        "member": "google_105Q_surface_code_d3_d5_d7/d3_at_q10_7/X/r10/detection_events.b8"
+      },
+      {
+        "equal": true,
+        "member": "google_105Q_surface_code_d3_d5_d7/d3_at_q10_7/X/r110/detection_events.b8"
+      },
+      {
+        "equal": true,
+        "member": "google_105Q_surface_code_d3_d5_d7/d3_at_q10_7/X/r13/detection_events.b8"
+      },
+      {
+        "equal": true,
+        "member": "google_105Q_surface_code_d3_d5_d7/d3_at_q10_7/X/r130/detection_events.b8"
+      },
+      {
+        "equal": true,
+        "member": "google_105Q_surface_code_d3_d5_d7/d3_at_q10_7/X/r150/detection_events.b8"
+      },
+      {
+        "equal": true,
+        "member": "google_105Q_surface_code_d3_d5_d7/d3_at_q10_7/X/r170/detection_events.b8"
+      },
+      {
+        "equal": true,
+        "member": "google_105Q_surface_code_d3_d5_d7/d3_at_q10_7/X/r190/detection_events.b8"
+      },
+      {
+        "equal": true,
+        "member": "google_105Q_surface_code_d3_d5_d7/d3_at_q10_7/X/r210/detection_events.b8"
+      },
+      {
+        "equal": true,
+        "member": "google_105Q_surface_code_d3_d5_d7/d3_at_q10_7/X/r230/detection_events.b8"
+      }
+    ],
+    "scope": {
+      "abs_difference": 0.0,
+      "distinct_rounds": [
+        1,
+        10,
+        13,
+        30,
+        50,
+        70,
+        90,
+        110,
+        130,
+        150,
+        170,
+        190,
+        210,
+        230,
+        250
+      ],
+      "f_native": 2.4156874990071255,
+      "f_uniform": 2.4156874990071255,
+      "mean_fano_by_rounds": {
+        "1": 1.691453408550801,
+        "10": 2.2317235118518437,
+        "110": 2.447344865752684,
+        "13": 2.2573730380715373,
+        "130": 2.4547295335440333,
+        "150": 2.5231287418699844,
+        "170": 2.54103172708853,
+        "190": 2.507396965284619,
+        "210": 2.511163506986876,
+        "230": 2.7599103233243603,
+        "250": 2.5607988938551753,
+        "30": 2.4433682869199136,
+        "50": 2.384383012674988,
+        "70": 2.421081088626072,
+        "90": 2.5004255807054614
+      }
+    },
+    "standard_error": 0.017662745668101852,
+    "std_population": 0.3619785705054117,
+    "t_vs_poisson": 80.15104364910805
+  },
+  "premises": {
+    "P1": {
+      "halting": true,
+      "n_experiments": 420,
+      "population_by_distance": {
+        "3": 270,
+        "5": 120,
+        "7": 30
+      },
+      "status": "confirmed"
+    },
+    "P2": {
+      "halting": true,
+      "status": "confirmed"
+    },
+    "P3": {
+      "halting": true,
+      "status": "confirmed"
+    },
+    "P4": {
+      "halting": false,
+      "note": "carried from the freeze; not re-measured by this harness",
+      "status": "FALSIFIED-AS-PREDICTED (measured 2026-09-03)"
+    },
+    "P5": {
+      "basis": "archive md5 and size equal the pinned values",
+      "halting": false,
+      "status": "confirmed"
+    }
+  },
+  "preregistration_sha256": "8fa26d609e3c4cbe9b1681ca05c8cfbcadb09a64b83b5546a054e703a098098f",
+  "source_reported_values": {
+    "W1_F": 2.42,
+    "W1_N": 420,
+    "W1_spread": 0.36,
+    "W2": {
+      "3": 2.29,
+      "5": 2.59,
+      "7": 2.8
+    },
+    "W3_anova_F": 59.1,
+    "W4_t": 80.0
+  },
+  "status": "SPREMNO ZA GEJT",
+  "thresholds": {
+    "R1": 0.005,
+    "R3": 0.36,
+    "R5": 0.005,
+    "R6": 0.05,
+    "R7": 0.5,
+    "R8": 2.0,
+    "R9": 0.36
+  },
+  "verdicts": {
+    "W1": {
+      "abs_difference": 0.004312500992874391,
+      "recomputed": 2.4156874990071255,
+      "reported": 2.42,
+      "rule": "R1",
+      "verdict": "Verified"
+    },
+    "W2": {
+      "abs_difference": {
+        "3": 0.0042039563863789375,
+        "5": 0.0034905133333702487,
+        "7": 0.0021726747111352473
+      },
+      "recomputed": {
+        "3": 2.294203956386379,
+        "5": 2.59349051333337,
+        "7": 2.7978273252888646
+      },
+      "reported": {
+        "3": 2.29,
+        "5": 2.59,
+        "7": 2.8
+      },
+      "rule": "R5",
+      "verdict": "Verified"
+    },
+    "W3": {
+      "abs_difference": 0.0337201214468692,
+      "note": "R7 tests the F-statistic only. The source's 'p ~ 0' carries no pre-registered threshold and no verdict.",
+      "recomputed": 59.13372012144687,
+      "recomputed_p_value": 2.462351990289514e-23,
+      "reported": 59.1,
+      "rule": "R7",
+      "verdict": "Verified"
+    },
+    "W4": {
+      "abs_difference": 0.1510436491080469,
+      "recomputed": 80.15104364910805,
+      "reported": 80.0,
+      "rule": "R8",
+      "verdict": "Verified"
+    },
+    "scope": {
+      "abs_difference": 0.0,
+      "f_native": 2.4156874990071255,
+      "f_uniform": 2.4156874990071255,
+      "finding": "Aggregate stable under reweighting; W1 stands as reported",
+      "rule": "R9",
+      "threshold": 0.36,
+      "w1_as_hardware_property": "Verified"
+    }
+  }
+}
