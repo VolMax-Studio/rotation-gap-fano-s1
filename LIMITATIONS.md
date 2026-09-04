@@ -54,3 +54,16 @@ While the archive is balanced across rounds, it is **heavily unbalanced across c
 1. **Estimator Exactness:** The sample variance calculation employs `ddof=1` (`var_c = np.var(counts, ddof=1)`), exactly matching the author's script.
 2. **Statistical Reproducibility:** One-way ANOVA ($F = 59.13, p = 2.46 \times 10^{-23}$) and one-sample $t$-test ($t = +80.15$) reproduce to sub-decimal precision.
 3. **Strict Epistemic Isolation:** This audit proves the exact arithmetic reproducibility of Table III from raw detector bitstreams. In accordance with Section 7 of `PREREGISTRATION.md`, zero endorsement, validity, or evaluation is transferred to any companion theoretical physics conjectures (such as Standard Model gauge derivations, $\alpha_s$, or IBM Eagle datasets).
+
+---
+
+## 4. Determinism Proof & Multi-Download Artifact Stability
+
+1. **Cross-Session & Multi-Download Byte-Level Identity:**
+   - The primary output [`results/results.json`](results/results.json) produced from this fresh 5.7 GB download matched byte-for-byte with the previously committed baseline (`656438d`):
+     - `diff -u /tmp/committed_results.json results/results.json` returned **0 differences** (recorded in [`results/determinism_vs_committed.txt`](results/determinism_vs_committed.txt)).
+     - Successive executions within this session produced identical SHA-256 digests (`38fff894960d4c191b3c017c6d8d24ed35430a8eb19b610550a85f294a8281b8`, recorded in [`results/determinism_sha256.txt`](results/determinism_sha256.txt)).
+2. **Zenodo Archive Stability:**
+   - Multiple independent complete downloads of Zenodo record `13273331` yielded identical byte size (`5716907033`) and MD5 digest (`21fa6ad35b395d838ebcdbc92e364a12`), confirming remote repository stability across time.
+3. **Non-Deterministic Evidentiary Artifacts:**
+   - Log files ([`results/determinism_run1.log`](results/determinism_run1.log), [`results/determinism_run2.log`](results/determinism_run2.log)) and environment declarations ([`results/run_env.json`](results/run_env.json)) contain machine timestamps, local absolute paths, and stdout progress strings. They serve as evidentiary audit trails and are explicitly excluded from the Section 6 byte-diff determinism comparison.
