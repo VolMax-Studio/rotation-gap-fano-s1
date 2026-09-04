@@ -15,7 +15,7 @@ Stenberg (2026) reports that syndrome detection events on the Google Willow proc
 
 ---
 
-## 2. What Would Falsify It (Pre-Frozen Decision Rules)
+## 2. Decision Rules (Pre-Frozen in Git)
 
 Evaluation criteria were pre-registered and cryptographically locked in [`PREREGISTRATION.md`](PREREGISTRATION.md) (Commit [`ff84608`](https://github.com/VolMax-Studio/rotation-gap-fano-s1/commit/ff84608)):
 
@@ -39,7 +39,7 @@ W2 (d=3 / 5 / 7)    | 2.2942 / 2.5935 / 2.7978    | 2.29 / 2.59 / 2.80  | Verifi
 W3 (One-Way ANOVA)  | F = 59.1337 (p = 2.46e-23)  | F = 59.1 (p ~ 0)    | Verified (Rule R7: |59.1337 - 59.1| = 0.0337 <= 0.5)
 W4 (One-Sample t)   | t = +80.15                  | t = +80             | Verified (Rule R8: |80.15 - 80| = 0.1510 <= 2.0)
 --------------------+-----------------------------+---------------------+------------------------------------------------
-SCOPE TEST (R9/R10) | Aggregate stable under reweighting (null result: threshold 0.36 exceeds composition delta 0.146)
+SCOPE TEST (R9/R10) | Aggregate stable under round reweighting (structural zero: archive is balanced with 28 runs/round)
 ========================================================================================================================
 ```
 
@@ -47,13 +47,15 @@ SCOPE TEST (R9/R10) | Aggregate stable under reweighting (null result: threshold
 
 ## 4. Key Findings & Epistemic Boundaries
 
-1. **Numerical Reproducibility of Table III:**
-   * All 4 reported numbers reproduce within pre-registered tight numerical tolerance from raw physical detector bitstreams (`detection_events.b8` and `circuit_ideal.stim`).
-2. **Archive Composition vs Hardware Invariance ([`LIMITATIONS.md`](LIMITATIONS.md)):**
-   * The overall figure $F = 2.42$ is an unweighted arithmetic mean over an archive consisting of 64.3% $d=3$ (9 patches), 28.6% $d=5$ (4 patches), and 7.1% $d=7$ (1 patch).
-   * Reweighting equally across code distances yields $F_{\text{uniform}} = 2.56$. The reported $2.42$ denotes the composition of Google's public archive.
-3. **Strict Epistemic Isolation:**
-   * Zero endorsement, validation, or evaluation is transferred to any theoretical physics interpretations, standard model identities, or IBM hardware claims outside Section II F.
+1. **Exact Numerical Reproducibility:**
+   * All 4 reported numbers reproduce within pre-registered numerical tolerances directly from raw physical detector records (`detection_events.b8` and `circuit_ideal.stim`).
+2. **Archive Composition (Exploratory Finding — see [`LIMITATIONS.md`](LIMITATIONS.md)):**
+   * The headline number $F = 2.42$ reflects the archive's specific subgrid composition (64.3% $d=3$, 28.6% $d=5$, 7.1% $d=7$).
+   * Equal-weighting by code distance yields an exploratory aggregate $F_{\text{uniform, distance}} = \mathbf{2.5618}$.
+3. **Pre-Registration Scope Design Defect (Logged in [`FAILURES.md`](FAILURES.md) Entry #001):**
+   * Pre-registered rule `R9`/`R10` tested reweighting across QEC rounds, which was mathematically guaranteed to yield $|\Delta| = 0.000000$ due to the 28-run-per-round balanced design.
+4. **Strict Epistemic Isolation:**
+   * Zero endorsement, validation, or evaluation is transferred to any theoretical physics conjectures or companion preprints outside Section II F.
 
 ---
 
