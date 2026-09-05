@@ -1,0 +1,79 @@
+name: CI-as-Witness Reproduction
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches: [ main ]
+
+permissions:
+  contents: read
+  id-token: write
+  attestations: write
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Install pinned dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements-minimal.txt
+
+      - name: Inspect Runner Disk and Environment
+        run: |
+          echo "=== Disk Usage Before Download ==="
+          df -h
+          echo "=== Python & Environment Info ==="
+          python3 --version
+          pip list
+
+      - name: Download pinned Zenodo archive
+        run: |
+          mkdir -p data
+          echo "Downloading Zenodo archive 10.5281/zenodo.13273331 (5.72 GB)..."
+          curl -L --fail --retry 3 --retry-delay 10 \
+            -o data/google_105Q_surface_code_d3_d5_d7.zip \
+            https://zenodo.org/records/13273331/files/google_105Q_surface_code_d3_d5_d7.zip
+
+          echo "=== Verifying Archive MD5 ==="
+          echo "21fa6ad35b395d838ebcdbc92e364a12  data/google_105Q_surface_code_d3_d5_d7.zip" | md5sum -c -
+
+      - name: Inspect Disk After Download
+        run: |
+          echo "=== Disk Usage After Download ==="
+          df -h
+
+      - name: Execute reproduce.py with Resource Profiling
+        run: |
+          echo "=== Starting reproduce.py execution ==="
+          /usr/bin/time -v python3 reproduce.py \
+            --archive data/google_105Q_surface_code_d3_d5_d7.zip \
+            --verify-popcount 10
+
+      - name: Assert exact byte-level output hash
+        run: |
+          EXPECTED_HASH="38fff894960d4c191b3c017c6d8d24ed35430a8eb19b610550a85f294a8281b8"
+          ACTUAL_HASH=$(sha256sum results/results.json | awk '{print $1}')
+          echo "Actual generated SHA-256:   $ACTUAL_HASH"
+          echo "Expected pinned SHA-256:    $EXPECTED_HASH"
+          if [ "$ACTUAL_HASH" != "$EXPECTED_HASH" ]; then
+            echo "[FAIL] Generated results.json hash does not match pinned output!"
+            exit 1
+          fi
+          echo "[PASS] Exact byte-identical reproduction verified by CI."
+
+      - name: Attest Build Provenance (SLSA / Sigstore)
+        uses: actions/attest-build-provenance@v1
+        with:
+          subject-path: 'results/results.json'
