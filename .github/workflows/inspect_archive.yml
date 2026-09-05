@@ -1,0 +1,48 @@
+name: Inspect Zenodo Archive Contents
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+
+    steps:
+      - name: Download pinned Zenodo archive
+        run: |
+          mkdir -p data
+          echo "Downloading Zenodo archive (5.72 GB)..."
+          curl -L --fail --retry 3 --retry-delay 10 \
+            -o data/google_105Q_surface_code_d3_d5_d7.zip \
+            https://zenodo.org/records/13273331/files/google_105Q_surface_code_d3_d5_d7.zip
+
+          echo "=== Verifying Archive MD5 ==="
+          echo "21fa6ad35b395d838ebcdbc92e364a12  data/google_105Q_surface_code_d3_d5_d7.zip" | md5sum -c -
+
+      - name: Full Inventory and Decoder Listing
+        run: |
+          echo "================================================================================"
+          echo "1. TOTAL ARCHIVE MEMBER COUNT & SIZE"
+          echo "================================================================================"
+          unzip -l data/google_105Q_surface_code_d3_d5_d7.zip | tail -n 5
+
+          echo "================================================================================"
+          echo "2. ALL DECODER PIPELINES UNDER decoding_results/"
+          echo "================================================================================"
+          unzip -l data/google_105Q_surface_code_d3_d5_d7.zip | grep "decoding_results/" | \
+            sed 's|.*decoding_results/||' | cut -d/ -f1 | sort | uniq -c
+
+          echo "================================================================================"
+          echo "3. ALL UNIQUE FILE EXTENSIONS AND BASENAMES IN decoding_results/"
+          echo "================================================================================"
+          unzip -l data/google_105Q_surface_code_d3_d5_d7.zip | grep "decoding_results/" | \
+            awk '{print $4}' | sed 's|.*/||' | sort | uniq -c
+
+          echo "================================================================================"
+          echo "4. SEARCH FOR ANY NEURAL / WEIGHT / NETWORK STRINGS ACROSS ENTIRE ARCHIVE"
+          echo "================================================================================"
+          unzip -l data/google_105Q_surface_code_d3_d5_d7.zip | grep -iE "neural|network|alpha|weight|prior|model" | head -n 50 || echo "None found"
