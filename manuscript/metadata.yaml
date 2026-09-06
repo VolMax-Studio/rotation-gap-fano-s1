@@ -55,14 +55,18 @@ type: Replication
 domain: Quantum Computation and Statistical Physics
 language: Python
 
+# -----------------------------------------------------------------------------
+# Post-acceptance metadata (to be assigned/filled by editorial staff upon acceptance)
+# -----------------------------------------------------------------------------
+
 review:
-  - url: https://github.com/ReScience/submissions/issues/127
-  - doi:
+  - url:
+    doi:
 
 contributors:
   - role: editor
-    name: Nicolas P. Rougier
-    orcid: 0000-0002-6972-589X
+    name:
+    orcid:
   - role: reviewer
     name:
     orcid:
@@ -71,14 +75,14 @@ contributors:
     orcid:
 
 dates:
-  - received: September 6, 2026
-  - accepted:
-  - published:
+  - received:
+    accepted:
+    published:
 
 article:
   - number:
-  - doi:
-  - url:
+    doi:
+    url:
 
 journal:
   - name: "ReScience C"

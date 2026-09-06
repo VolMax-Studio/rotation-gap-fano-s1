@@ -26,7 +26,7 @@ This replication specifically targets the four empirical claims stated in Sectio
 
 \section{Implementation Provenance and Architecture}
 
-To ensure complete transparency regarding software provenance, our replication codebase~\cite{volmax_fano_audit_2026} is organized into three distinct operational layers, separating independent execution infrastructure from transcribed analytical operations:
+To ensure complete transparency regarding software provenance, our replication codebase~\cite{volmax_fano_audit_2026} is organized into three distinct operational layers, separating independent execution infrastructure from author-derived conventions and analytical operations:
 
 \begin{quote}
 \itshape
@@ -40,20 +40,22 @@ To ensure complete transparency regarding software provenance, our replication c
 \hline
 \textbf{Provenance Layer} & \textbf{Component Description} & \textbf{Implementation Origin} \\
 \hline
-\textbf{Layer A} & Raw telemetry ingestion, directory traversal, and manifest hashing & Independent Reimplementation \\
-& Cryptographic SHA-256 verification (1,260 member files) & Independent Reimplementation \\
-& Premise invalidation gates ($P_1$–$P_5$) & Independent Reimplementation \\
-& Fast vectorized popcount decoder (\texttt{read\_detection\_counts\_fast}) & Independent Reimplementation \\
-& Automated decision and tolerance rules ($R_1$–$R_{10}$) & Independent Reimplementation \\
-& CI harness and byte-identical JSON reproduction engine & Independent Reimplementation \\
+\textbf{Layer A} & Archive integrity pinning (MD5, size) and \texttt{PREREGISTRATION.md} SHA-256 pin & Independent Implementation \\
+(Independent & Cryptographic verification of \texttt{data\_manifest.json} (1,260 member digests) & Independent Implementation \\
+Infrastructure) & Step 0 premise checking harness and halting invalidation gates ($P_1$–$P_5$) & Independent Implementation \\
+& Fast vectorized popcount decoder (\texttt{read\_detection\_counts\_fast}) & Independent Implementation \\
+& Mechanical decision logic and tolerance rules ($R_1$–$R_{10}$) & Independent Implementation \\
+& CI harness and deterministic byte-identical JSON reproduction engine & Independent Implementation \\
 \hline
-\textbf{Layer B} & Sample variance with Bessel correction (\texttt{ddof=1}) & Transcribed from Author Code \\
-(Analytical Path) & Per-experiment Fano factor computation ($F_i = s_i^2 / \bar{x}_i$) & Transcribed from Author Code \\
-& Aggregate sample mean and standard deviation & Transcribed from Author Code \\
-& One-sample $t$-statistic against $F=1$ & Transcribed from Author Code \\
-& Distance-stratified means and one-way ANOVA & Transcribed from Author Code \\
+\textbf{Layer B} & Archive layout traversal and path convention (\texttt{enumerate\_experiments}) & Author Convention (\texttt{willow\_fano\_analysis.py}) \\
+(Author-Derived & Detector count parsing from Stim circuit string (\texttt{count\_detectors}) & Author Convention (\texttt{willow\_fano\_analysis.py}) \\
+on Analytical & Sample variance with Bessel correction (\texttt{ddof=1}) & Transcribed from Author Script (§2) \\
+Path) & Per-experiment Fano factor computation ($F_i = s_i^2 / \bar{x}_i$) & Transcribed from Author Script (§2) \\
+& Aggregate sample mean ($\bar{F}$) and standard deviation ($s$) & Transcribed from Author Script (§2) \\
+& One-sample $t$-statistic against $F=1$ ($t = (\bar{F} - 1) / (s / \sqrt{N})$) & Transcribed from Author Script (§2) \\
+& Distance-stratified means and one-way ANOVA ($F$-statistic, $p$-value) & Transcribed from Author Script (§2) \\
 \hline
-\textbf{Layer C} & Reference bit-shift popcount loop (\texttt{read\_detection\_counts\_author}) & Transcribed from Author Code \\
+\textbf{Layer C} & Reference bit-shift popcount loop (\texttt{read\_detection\_counts\_author}) & Transcribed from Author Script \\
 (Off-Path Only) & Executed exclusively under \texttt{--verify-popcount} for bitwise equivalence & Reference / Invariant Check \\
 \hline
 \end{tabularx}
@@ -65,32 +67,32 @@ The primary detector reading pipeline in our audit (\texttt{read\_detection\_cou
 
 \section{Preregistered Verification Pipeline}
 
-The replication was conducted according to a preregistration protocol (\texttt{PREREGISTRATION.md}, commit \texttt{ff84608}) committed prior to final ratification.
+The replication was conducted according to a preregistration protocol (\texttt{PREREGISTRATION.md}, commit \texttt{ff84608}) committed prior to reading archive data.
 
 \subsection{Premise and Invalidation Gates ($P_1$–$P_5$)}
-Before computing statistical summaries, the harness verifies five structural premises:
+Before computing statistical summaries, the harness evaluates five preregistered premise conditions defined at Step~0:
 \begin{itemize}
-    \item \textbf{$P_1$ (Input Completeness):} Exactly 420 experiment directories present in Zenodo archive 13273331.
-    \item \textbf{$P_2$ (Detector Stream Integrity):} Every admitted experiment contains valid \texttt{detection\_events.bstream} files.
-    \item \textbf{$P_3$ (Manifest Checksum):} SHA-256 digest of all 1,260 member files matches \texttt{manifest.sha256}.
-    \item \textbf{$P_4$ (Distance Coverage):} All specified distances $d \in \{3, 5, 7\}$ are represented.
-    \item \textbf{$P_5$ (Non-Zero Counts):} Mean detector event counts per experiment $\mu > 0$.
+    \item \textbf{$P_1$ (Experiment Count and Distance Span, Halting):} The archive at DOI \texttt{10.5281/zenodo.13273331} contains exactly 420 surface-code experiments spanning $d \in \{3, 5, 7\}$.
+    \item \textbf{$P_2$ (Unprocessed Count Recoverability, Halting):} Per-shot detection-event counts are recoverable from the archive with no preprocessing beyond decoding the packed detector records (\texttt{detection\_events.b8}).
+    \item \textbf{$P_3$ (Underlying Cohort Identity, Halting):} The same 420 experiments underlie $W_1$, $W_2$, $W_3$, and $W_4$.
+    \item \textbf{$P_4$ (Missing Author Output Artifact, Non-Halting):} The author's repository contains no committed output file from \texttt{willow/willow\_fano\_analysis.py} (condition measured as \textbf{Falsified-as-Predicted} at preregistration freeze on 2026-09-03).
+    \item \textbf{$P_5$ (Archive Byte Identity, Non-Halting):} The archive bytes are identical to those used in \texttt{willow-decoder-audit-s1}.
 \end{itemize}
-All five premises evaluated to \textbf{PASS}.
+All three halting premises ($P_1, P_2, P_3$) evaluated to \textbf{PASS}, allowing execution of the analytical path without triggering the Premise Invalidation Gate.
 
 \subsection{Decision Rules and Pre-Registered Tolerances}
 Mechanical decision rules ($R_1$–$R_{10}$) define exact acceptance criteria:
 \begin{itemize}
-    \item \textbf{$R_1$ ($W_1$ Mean Tolerance):} $|\bar{F}_{\text{recomputed}} - 2.42| < 0.005$.
-    \item \textbf{$R_2$ ($W_1$ Standard Deviation):} $|s_{\text{recomputed}} - 0.36| < 0.010$.
-    \item \textbf{$R_5$ ($W_2$ Distance Stratification):} $|\bar{F}_{d} - F_{d,\text{reported}}| < 0.005$ for each $d \in \{3, 5, 7\}$.
+    \item \textbf{$R_1$ ($W_1$ Mean Tolerance):} $|\bar{F}_{\text{recomputed}} - 2.42| < 0.005$ (corresponding to the half-width of the last printed digit).
+    \item \textbf{$R_2$ ($W_1$ Standard Deviation):} $|s_{\text{recomputed}} - 0.36| \le 0.36$ (outer admissible spread band).
+    \item \textbf{$R_5$ ($W_2$ Distance Stratification):} $|\bar{F}_{d} - F_{d,\text{reported}}| < 0.005$ for each distance $d \in \{3, 5, 7\}$.
     \item \textbf{$R_7$ ($W_3$ ANOVA $F$-statistic):} $|F_{\text{ANOVA}} - 59.1| \le 0.500$.
     \item \textbf{$R_8$ ($W_4$ $t$-statistic):} $|t - 80.0| \le 2.000$.
 \end{itemize}
 
 \section{Replication Results}
 
-All numerical results were computed deterministically from raw detector bitstreams using \texttt{reproduce.py} and archived in \texttt{results/results.json}.
+All numerical results were computed deterministically from raw detector bitstreams (\texttt{detection\_events.b8}) using \texttt{reproduce.py} and archived in \texttt{results/results.json}. Cryptographic integrity of all 1,260 consumed member files was verified against the committed \texttt{data\_manifest.json}.
 
 \begin{table}[h!]
 \centering
@@ -116,7 +118,7 @@ $W_4$ & One-sample $t$-stat & $+80.0$ & $+80.1510$ & $0.1510$ & \textbf{Verified
 \label{tab:results}
 \end{table}
 
-As shown in Table~\ref{tab:results}, every recomputed statistic falls well within the pre-registered tolerance bounds. The minor differences ($|\Delta| \le 0.0043$ for Fano means) are entirely attributable to rounding in the original manuscript's text and tables.
+As shown in Table~\ref{tab:results}, every targeted statistic falls within the pre-registered tolerance bounds. The minor differences ($|\Delta| \le 0.0043$ for Fano factor means) are consistent with the precision at which the source values were reported in the original manuscript's text and tables.
 
 \section{Epistemic Findings and Limitations}
 
@@ -138,7 +140,7 @@ a shift of $|\Delta| = 0.1461$ ($+6.0\%$). Thus, the headline aggregate value $F
 
 \section{Conclusion and Code Availability}
 
-We have successfully replicated Claims~$W_1$–$W_4$ from Section~II\,F and Table~III of Stenberg (2026)~\cite{stenberg2026rotation}. The super-Poissonian Fano factors, distance monotonicity, ANOVA significance, and $t$-test statistics are robust, mathematically verified, and reproducible from raw telemetry bitstreams.
+We have replicated Claims~$W_1$–$W_4$ from Section~II\,F and Table~III of Stenberg (2026)~\cite{stenberg2026rotation}. The super-Poissonian Fano factors, distance monotonicity, ANOVA significance, and $t$-test statistics were recomputed within the pre-registered numerical tolerances from the public archive.
 
 The complete audit code, verification harness, and results are open source under the MIT License and permanently archived:
 \begin{itemize}

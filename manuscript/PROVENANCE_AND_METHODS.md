@@ -12,34 +12,35 @@
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │ LAYER A — INDEPENDENTLY IMPLEMENTED INFRASTRUCTURE                         │
-│ • Telemetry Ingestion & Path Discovery (traverse metadata.json)            │
-│ • Cryptographic SHA-256 Manifest Verification (1,260 member digests)        │
-│ • Premise & Halting Invalidation Gates (P1–P5)                             │
-│ • Primary Fast Vectorized Binary Popcount Decoder                          │
+│ • Archive integrity pinning (MD5, size) and PREREGISTRATION.md SHA-256 pin  │
+│ • Cryptographic SHA-256 manifest verification (data_manifest.json, 1,260)   │
+│ • Step 0 premise checking harness and halting invalidation gates (P1–P5)    │
+│ • Primary fast vectorized popcount decoder                                  │
 │   (read_detection_counts_fast: np.unpackbits with bitorder="little")       │
-│ • Mechanical Decision Logic & Automated Gate Rules (R1–R10)                │
-│ • Determinism & CI Harness (byte-identical JSON recreation verification)   │
+│ • Mechanical decision logic & automated tolerance rules (R1–R10)           │
+│ • Determinism & CI harness (byte-identical JSON reproduction verification) │
 └─────────────────────────────────────────────────────────────────────────────┘
                                       │
                                       ▼
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│ LAYER B — AUTHOR-DERIVED ESTIMATOR OPERATIONS ON ANALYTICAL PATH           │
-│ (Deliberately transcribed under PREREGISTRATION.md §2 to execute the        │
-│ author's published estimator rather than substitute an alternative)         │
-│ • Sample Variance with ddof=1 (line 58: np.var(counts, ddof=1))             │
-│ • Per-Experiment Fano Factor (line 59: var_c / mean_c)                     │
-│ • Overall Aggregate Mean (line 97: np.mean(all_fanos))                     │
-│ • Standard Error of the Mean (line 93: np.std(all_fanos) / sqrt(N))        │
-│ • One-Sample t-statistic vs Poisson F=1 (line 94: (mean - 1.0) / se)       │
-│ • Per-Distance Mean Aggregates (lines 235–236: np.mean(fanos))             │
-│ • One-Way ANOVA across Distance Groups (line 242: sp_stats.f_oneway)       │
+│ LAYER B — AUTHOR-DERIVED CONVENTIONS & ESTIMATOR (ANALYTICAL PATH)         │
+│ (Path/counting conventions & operations transcribed under PREREG §2)        │
+│ • Experiment path/layout convention (willow_fano_analysis.py lines 32, 48–54│
+│   in enumerate_experiments())                                              │
+│ • Detector count string extraction (count_detectors() from Stim circuit)   │
+│ • Sample variance with Bessel correction (np.var(counts, ddof=1))          │
+│ • Per-experiment Fano factor computation (var_c / mean_c)                  │
+│ • Overall aggregate unweighted mean (np.mean(all_fanos))                   │
+│ • Standard error of the mean (np.std(all_fanos) / sqrt(N))                 │
+│ • One-sample t-statistic vs Poisson F=1 ((mean - 1.0) / se)                │
+│ • Per-distance mean aggregates (np.mean(fanos))                            │
+│ • One-way ANOVA across distance groups (sp_stats.f_oneway)                 │
 └─────────────────────────────────────────────────────────────────────────────┘
                                       │
                                       ▼
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │ LAYER C — AUTHOR-DERIVED REFERENCE DECODER OFF ANALYTICAL PATH              │
-│ • Reference Bit-Shift Decoder Loop (lines 14–23: read_detection_counts_    │
-│   author)                                                                  │
+│ • Reference bit-shift decoder loop (read_detection_counts_author)          │
 │ • Used exclusively off-path under --verify-popcount to prove 10/10 exact   │
 │   integer equality (Δ = 0) with the fast vectorized decoder                │
 └─────────────────────────────────────────────────────────────────────────────┘
