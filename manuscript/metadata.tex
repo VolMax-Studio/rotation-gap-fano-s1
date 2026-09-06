@@ -1,0 +1,60 @@
+% DO NOT EDIT - automatically generated from metadata.yaml
+
+\def \codeURL{https://github.com/VolMax-Studio/rotation-gap-fano-s1}
+\def \codeDOI{10.5281/zenodo.22309778}
+\def \codeSWH{}
+\def \dataURL{https://doi.org/10.5281/zenodo.13273331}
+\def \dataDOI{10.5281/zenodo.13273331}
+\def \editorNAME{}
+\def \editorORCID{}
+\def \reviewerINAME{}
+\def \reviewerIORCID{}
+\def \reviewerIINAME{}
+\def \reviewerIIORCID{}
+\def \dateRECEIVED{}
+\def \dateACCEPTED{}
+\def \datePUBLISHED{}
+\def \articleTITLE{[Re] Partial Replication of the Willow Fano-Factor Results in "The Rotation Gap Is Not An Error"}
+\def \articleTYPE{Replication}
+\def \articleDOMAIN{Quantum Computation and Statistical Physics}
+\def \articleBIBLIOGRAPHY{bibliography.bib}
+\def \articleYEAR{2026}
+\def \reviewURL{}
+\def \articleABSTRACT{We present a pre-registered partial replication of the empirical quantum error-correction
+detector statistics reported in Section II F and Table III of Stenberg (2026, arXiv:2604.11963v1).
+Analyzing raw detector bitstream records from the 105-qubit Google Willow archive (Zenodo DOI:
+10.5281/zenodo.13273331, 420 experiments across code distances d in {3, 5, 7}), we recompute
+all four primary and secondary claims under strict cryptographic and algorithmic verification gates.
+We confirm that: (1) the aggregate empirical Fano factor reproduces to F = 2.4157 ≈ 2.42 ± 0.36 (Claim W1);
+(2) distance-stratified Fano factors reproduce to d=3 -> 2.2942, d=5 -> 2.5935, and d=7 -> 2.7978 (Claim W2);
+(3) the one-way ANOVA across distances yields F = 59.13, p = 2.46e-23 (Claim W3); and (4) the one-sample
+t-statistic against Poisson expectation (F = 1) reproduces to t = +80.15 (Claim W4).
+We explicitly document our three-layer mixed implementation provenance: the primary detector decoding path
+is independently implemented (read_detection_counts_fast), while the statistical estimator on the analytical path
+deliberately transcribes the author's published operations under the preregistered design, with reference
+author decoding operations retained off-path for 10/10 exact bitwise equivalence verification.
+Finally, we document two epistemic limitations: a structural zero-power defect in the preregistered
+QEC round-sensitivity test resulting from Google's balanced experimental design (N_r = 28), and an exploratory
+finding demonstrating that equal-distance weighting shifts the recomputed mean Fano factor from 2.4157 to 2.5618
+(|Delta| = 0.1461, with the corresponding source-reported aggregate being 2.42) due to the predominant representation
+of d=3 experiments (64.3%) in the public repository.
+}
+\def \replicationCITE{Stenberg, S. (2026). The Rotation Gap Is Not An Error — Ternary Structure in IBM Quantum Hardware. arXiv:2604.11963v1 [quant-ph].}
+\def \replicationBIB{stenberg2026rotation}
+\def \replicationURL{https://arxiv.org/abs/2604.11963}
+\def \replicationDOI{10.48550/arXiv.2604.11963}
+\def \contactNAME{Ivan Nestorov}
+\def \contactEMAIL{volmax.core@gmail.com}
+\def \articleKEYWORDS{quantum error correction, surface codes, google willow, fano factor, replication, python}
+\def \journalNAME{ReScience C}
+\def \journalVOLUME{}
+\def \journalISSUE{}
+\def \articleNUMBER{}
+\def \articleDOI{}
+\def \authorsFULL{Ivan Nestorov}
+\def \authorsABBRV{I. Nestorov}
+\def \authorsSHORT{Nestorov}
+\title{\articleTITLE}
+\date{}
+\author[1,\orcid{0009-0006-7940-9539}]{Ivan Nestorov}
+\affil[1]{VolMax Studio Lab, Belgrade, Serbia}
