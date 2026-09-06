@@ -1,0 +1,44 @@
+name: Build ReScience Manuscript
+
+on:
+  push:
+    paths:
+      - 'manuscript/**'
+      - '.github/workflows/build-manuscript.yml'
+  pull_request:
+    paths:
+      - 'manuscript/**'
+      - '.github/workflows/build-manuscript.yml'
+  workflow_dispatch:
+
+jobs:
+  build-manuscript:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Validate Metadata and Generate LaTeX Header
+        working-directory: manuscript
+        run: |
+          pip install pyyaml
+          python3 article.py
+          python3 yaml-to-latex.py -i metadata.yaml -o metadata.tex
+
+      - name: Compile ReScience Manuscript PDF
+        uses: xu-cheng/latex-action@v3
+        with:
+          root_file: article.tex
+          working_directory: manuscript
+          latexmk_use_xelatex: true
+
+      - name: Upload PDF Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: article-pdf
+          path: manuscript/article.pdf

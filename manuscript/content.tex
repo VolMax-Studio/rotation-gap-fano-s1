@@ -33,9 +33,10 @@ To ensure complete transparency regarding software provenance, our replication c
 ``The primary detector decoding path is independently implemented; the statistical estimator on the analytical path deliberately transcribes the author's published operations under the preregistered design.''
 \end{quote}
 
-\begin{table}[h!]
+\begin{table}[htbp]
 \centering
-\small
+\footnotesize
+\setlength{\tabcolsep}{3pt}
 \begin{tabularx}{\linewidth}{|l|X|l|}
 \hline
 \textbf{Provenance Layer} & \textbf{Component Description} & \textbf{Implementation Origin} \\
@@ -99,10 +100,11 @@ Secondary claims $W_2$–$W_4$ carry independent decision rules:
 
 All numerical results were computed deterministically from raw detector bitstreams (\texttt{detection\_events.b8}) using \texttt{reproduce.py} and archived in \texttt{results/results.json}. Cryptographic integrity of all 1,260 consumed member files was verified against the committed \texttt{data\_manifest.json}.
 
-\begin{table}[h!]
+\begin{table}[htbp]
 \centering
-\small
-\begin{tabularx}{\linewidth}{|c|l|c|c|c|c|}
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{tabularx}{\linewidth}{|c|l|c|c|c|X|}
 \hline
 \textbf{Claim} & \textbf{Quantity} & \textbf{Reported} & \textbf{Recomputed} & \textbf{Absolute Delta $|\Delta|$} & \textbf{Verdict / Status} \\
 \hline
