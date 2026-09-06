@@ -1,0 +1,125 @@
+\documentclass[10pt,a4paper,onecolumn]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{microtype}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{geometry}
+\geometry{margin=2.5cm}
+
+\title{\textbf{[Replication] Independent Verification of Empirical Fano Factor Claims on the Google Willow Quantum Surface-Code Telemetry}}
+
+\author{
+  \textbf{Ivan Nestorov}\textsuperscript{1,2}\\
+  \small\textsuperscript{1}VolMax Studio Lab, Belgrade, Serbia\\
+  \small\textsuperscript{2}ORCID: \href{https://orcid.org/0009-0006-7940-9539}{0009-0006-7940-9539}\\
+  \small Contact: \texttt{volmax.core@gmail.com}
+}
+
+\date{September 2026}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+This article presents an independent, pre-registered replication of the empirical quantum error-correction (QEC) detector statistics reported in Section~II~F and Table~III of Stenberg (2026, arXiv:2604.11963v1). Analyzing raw detector bitstream records from the 105-qubit Google Willow archive (Zenodo DOI: \texttt{10.5281/zenodo.13273331}, 420 experiments across code distances $d \in \{3, 5, 7\}$), we recompute all four primary and secondary claims under strict cryptographic and algorithmic verification gates. We confirm that: (1) the aggregate empirical Fano factor reproduces to $F = 2.4157 \approx 2.42 \pm 0.36$ (Claim~$\text{W}_1$); (2) distance-stratified Fano factors reproduce to $d=3 \to 2.2942$ ($N=270$), $d=5 \to 2.5935$ ($N=120$), and $d=7 \to 2.7978$ ($N=30$) (Claim~$\text{W}_2$); (3) the one-way ANOVA across distances yields $F = 59.13, p = 2.46 \times 10^{-23}$ (Claim~$\text{W}_3$); and (4) the one-sample $t$-statistic against Poisson expectation ($F=1$) reproduces to $t = +80.15$ (Claim~$\text{W}_4$). 
+
+We explicitly document our mixed implementation provenance: the primary execution pipeline utilizes an independently developed, vectorized binary detector unpacking harness (\texttt{read\_detection\_counts\_fast}), while reference author operations were transcribed to establish bit-for-bit equivalence on archive members without numerical drift. Finally, we report two epistemic limitations: a structural zero-power defect in the pre-registered QEC round-sensitivity test resulting from Google's balanced experimental design ($N_r = 28$), and an exploratory finding demonstrating that equal-distance weighting shifts the mean Fano factor from $2.42$ to $2.56$ due to the predominant representation of $d=3$ experiments (64.3\%) in the public repository.
+\end{abstract}
+
+\section{Introduction}
+
+In a recent preprint investigating non-Markovian noise structures in superconducting quantum processors, Stenberg~\cite{stenberg2026rotation} reported that detection event statistics in surface-code memory experiments on Google's 105-qubit Willow architecture exhibit strong super-Poissonian variance ($F > 1$). Specifically, Section~II~F and Table~III present four distinct empirical claims derived from 420 publicly deposited experimental runs:
+\begin{enumerate}
+    \item[\textbf{W1.}] An overall aggregate Fano factor $F = 2.42 \pm 0.36$ across $N=420$ Willow experiments.
+    \item[\textbf{W2.}] Monotonically increasing per-distance Fano averages: $d=3 \to 2.29$, $d=5 \to 2.59$, and $d=7 \to 2.80$.
+    \item[\textbf{W3.}] A one-way ANOVA across code distances yielding an $F$-statistic of $59.1$ ($p \approx 0$).
+    \item[\textbf{W4.}] A one-sample $t$-statistic against theoretical Poisson variance ($F=1$) of $t = +80$.
+\end{enumerate}
+
+\subsection{Scope Justification and Boundaries}
+In accordance with ReScience~C replication guidelines and formal editorial consultation (Issue~\#127), this study focuses strictly on the arithmetic and statistical reproducibility of Table~III ($\text{W}_1$--$\text{W}_4$) from raw binary telemetry. In accordance with pre-registered boundaries (\texttt{PREREGISTRATION.md} \S7), companion claims involving IBM Eagle hardware telemetry ($F=0.856$), neural/regime decoder logical error benchmarks, and speculative theoretical physics conjectures (e.g., fine-structure constant derivations) are explicitly out of scope.
+
+\section{Implementation Provenance \& Methods}
+
+To adhere to transparent computational replication standards, we categorize every component of our execution pipeline according to its lineage (Table~\ref{tab:provenance}).
+
+\begin{table}[htbp]
+\centering
+\small
+\begin{tabular}{lll}
+\toprule
+\textbf{Component} & \textbf{Lineage / Reference} & \textbf{Implementation in \texttt{reproduce.py}} \\
+\midrule
+Archive Layout & Author script (\texttt{willow\_fano\_analysis.py}: lines 32, 48--54) & \texttt{enumerate\_experiments()} \\
+Detector Counting & Author script (line 28: \texttt{.count("DETECTOR")}) & \texttt{count\_detectors()} \\
+\textbf{Primary Decoder} & \textbf{Independently Implemented} (Vectorized NumPy unpack) & \textbf{\texttt{read\_detection\_counts\_fast()}} \\
+Reference Decoder & Author script (lines 14--23 bit-shift loop) & \texttt{read\_detection\_counts\_author()} (Equivalence gate) \\
+Fano Estimator & Author script (lines 58--59: \texttt{np.var(..., ddof=1) / mean}) & \texttt{step0\_and\_compute()} \\
+Summary Statistics & Author script (lines 93--97, 236, 242) & \texttt{step0\_and\_compute()} \\
+Verification Harness & \textbf{Independently Implemented} (P10 Mechanical Decision Gate) & \texttt{apply\_verdict\_rules()}, \texttt{verify\_manifest()} \\
+\bottomrule
+\end{tabular}
+\caption{Implementation provenance breakdown across analytical and validation components.}
+\label{tab:provenance}
+\end{table}
+
+\subsection{Primary vs. Reference Bitstream Decoding}
+The primary decoder \texttt{read\_detection\_counts\_fast} unrolls packed detector bytes using vectorized bit operations:
+\begin{lstlisting}[language=Python,basicstyle=\ttfamily\footnotesize]
+def read_detection_counts_fast(raw, n_detectors, n_shots):
+    bytes_per_shot = (n_detectors + 7) // 8
+    data = np.frombuffer(raw, dtype=np.uint8).reshape(n_shots, bytes_per_shot)
+    bits = np.unpackbits(data, axis=1, bitorder="little")[:, :n_detectors]
+    return bits.sum(axis=1, dtype=np.int32)
+\end{lstlisting}
+To guarantee that vectorization does not alter bit ordering or popcount semantics, the author's reference bit-shift loop (\texttt{read\_detection\_counts\_author}) is executed conditionally under the \texttt{--verify-popcount} parameter. 100\% of evaluated members confirmed exact integer equality ($\Delta = 0$).
+
+\section{Replication Results}
+
+Executing the frozen verification harness over the complete Google Willow archive yields the results summarized in Table~\ref{tab:results}.
+
+\begin{table}[htbp]
+\centering
+\small
+\begin{tabular}{lccccr}
+\toprule
+\textbf{Claim} & \textbf{Reported Value} & \textbf{Recomputed Value} & \textbf{Absolute Delta} & \textbf{Pre-Reg. Tolerance} & \textbf{Verdict} \\
+\midrule
+$\text{W}_1$ (Overall $F$) & $2.42 \pm 0.36$ & $2.4157 \pm 0.3620$ & $0.0043$ & $\pm 0.005$ & \textbf{Verified} \\
+$\text{W}_2$ ($d=3$) & $2.29$ & $2.2942$ & $0.0042$ & $\pm 0.005$ & \textbf{Verified} \\
+$\text{W}_2$ ($d=5$) & $2.59$ & $2.5935$ & $0.0035$ & $\pm 0.005$ & \textbf{Verified} \\
+$\text{W}_2$ ($d=7$) & $2.80$ & $2.7978$ & $0.0022$ & $\pm 0.005$ & \textbf{Verified} \\
+$\text{W}_3$ (ANOVA $F$) & $59.1$ & $59.1337$ & $0.0337$ & $\pm 0.500$ & \textbf{Verified} \\
+$\text{W}_4$ ($t$ vs. Poisson) & $+80$ & $+80.1510$ & $0.1510$ & $\pm 2.000$ & \textbf{Verified} \\
+\bottomrule
+\end{tabular}
+\caption{Replication summary against pre-registered verification tolerances ($N=420$).}
+\label{tab:results}
+\end{table}
+
+\section{Limitations \& Epistemic Analysis}
+
+\subsection{Structural Zero-Power Scope Test Defect}
+Pre-registered rule $R_9/R_{10}$ aimed to evaluate whether the aggregate Fano factor is sensitive to the number of QEC rounds ($r \in [1, 250]$) by comparing native weighting against round-uniform weighting ($|F_{\text{uniform}} - F_{\text{native}}| \le 0.36$). However, the Google Willow archive is perfectly balanced across rounds ($N_r = 28$ for all 15 rounds), making $F_{\text{native}} \equiv F_{\text{uniform}}$ mathematically identical ($|\Delta| = 0.000000$). Consequently, the formal firing of $R_9$ was a structural property of the archive layout rather than a physical test of round insensitivity.
+
+\subsection{Exploratory Code Distance Composition Decomposition}
+While balanced across rounds, the public dataset is heavily unbalanced across code distances: $d=3$ accounts for 64.29\% ($N=270$), $d=5$ for 28.57\% ($N=120$), and $d=7$ for only 7.14\% ($N=30$). If code distances are weighted equally:
+\begin{equation}
+F_{\text{distance-uniform}} = \frac{2.2942 + 2.5935 + 2.7978}{3} = \mathbf{2.5618} \quad (|\Delta| = 0.1461)
+\end{equation}
+Thus, the headline value $F=2.42$ reflects the statistical dominance of $d=3$ patches in the archive.
+
+\section{Conclusion}
+Claims $\text{W}_1$--$\text{W}_4$ of Stenberg (2026) reproduce arithmetic precision directly from raw Google Willow detector bitstreams. All replication code, manifests, and Sigstore attestations are publicly archived at Zenodo (DOI: \texttt{10.5281/zenodo.22309778}).
+
+\bibliographystyle{plain}
+\bibliography{bibliography}
+
+\end{document}
