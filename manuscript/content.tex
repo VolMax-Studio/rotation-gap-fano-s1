@@ -1,0 +1,148 @@
+\begin{abstract}
+We present a pre-registered partial replication of the empirical quantum error-correction detector statistics reported in Section~II\,F and Table~III of Stenberg (2026, arXiv:2604.11963v1)~\cite{stenberg2026rotation}. Analyzing raw detector bitstream records from the 105-qubit Google Willow archive (Zenodo DOI: 10.5281/zenodo.13273331~\cite{willow_dataset_2024}, 420 experiments across code distances $d \in \{3, 5, 7\}$), we recompute all four primary and secondary claims under strict cryptographic and algorithmic verification gates. We confirm that: (1) the aggregate empirical Fano factor reproduces to $F = 2.4157 \approx 2.42 \pm 0.36$ (Claim~$W_1$); (2) distance-stratified Fano factors reproduce to $d=3 \to 2.2942$, $d=5 \to 2.5935$, and $d=7 \to 2.7978$ (Claim~$W_2$); (3) the one-way ANOVA across distances yields $F = 59.13, p = 2.46 \times 10^{-23}$ (Claim~$W_3$); and (4) the one-sample $t$-statistic against Poisson expectation ($F = 1$) reproduces to $t = +80.15$ (Claim~$W_4$). We explicitly document our three-layer mixed implementation provenance: the primary detector decoding path is independently implemented (\texttt{read\_detection\_counts\_fast}), while the statistical estimator on the analytical path deliberately transcribes the author's published operations under the preregistered design, with reference author decoding operations retained off-path for 10/10 exact bitwise equivalence verification. Finally, we document two epistemic limitations: a structural zero-power defect in the preregistered QEC round-sensitivity test resulting from Google's balanced experimental design ($N_r = 28$), and an exploratory finding demonstrating that equal-distance weighting shifts the mean Fano factor from $2.42$ to $2.56$ due to the predominant representation of $d=3$ experiments (64.3\%) in the public repository.
+\end{abstract}
+
+\section{Introduction}
+
+In quantum error correction (QEC) with surface codes, syndrome measurements are performed over repeated rounds of stabilizer checks. The detection events (changes in syndrome eigenvalues indicating possible Pauli faults) are expected to follow approximately Poissonian or Bernoulli-like statistics under independent Markovian noise. Recently, Stenberg (2026)~\cite{stenberg2026rotation} analyzed open telemetry from Google's 105-qubit Willow architecture~\cite{willow_dataset_2024} and reported super-Poissonian detector event variance, quantified via the Fano factor:
+\begin{equation}
+F = \frac{\sigma^2}{\mu} > 1,
+\end{equation}
+reporting an aggregate mean of $F = 2.42 \pm 0.36$ across $N=420$ surface-code experiments, with monotonic scaling across code distances $d \in \{3, 5, 7\}$ and strong statistical rejection of Poisson variance ($t = +80.0, p < 10^{-15}$).
+
+The purpose of this study is to perform a pre-registered partial replication and deterministic audit of these empirical Willow detector statistics (Claims~$W_1$–$W_4$).
+
+\subsection{Scope and Replication Boundaries}
+
+This replication specifically targets the four empirical claims stated in Section~II\,F and Table~III of Stenberg (2026)~\cite{stenberg2026rotation}:
+\begin{itemize}
+    \item \textbf{Claim $W_1$ (Aggregate Fano Factor):} Overall empirical mean $F = 2.42 \pm 0.36$ across all admitted Google Willow experiments ($N = 420$).
+    \item \textbf{Claim $W_2$ (Distance Monotonicity):} Stratified distance means $d=3 \to 2.29$, $d=5 \to 2.59$, and $d=7 \to 2.80$.
+    \item \textbf{Claim $W_3$ (Distance Variation ANOVA):} One-way ANOVA across code distances yielding $F \approx 59.1$ ($p \approx 0$).
+    \item \textbf{Claim $W_4$ (Poisson Rejection $t$-test):} One-sample $t$-test against $F=1$ yielding $t = +80.0$.
+\end{itemize}
+
+\textbf{Explicit Non-Scope:} This study does \emph{not} evaluate logical error rate scaling, rotation gap hypotheses, ternary state conjectures, IBM Quantum hardware runs, or theoretical physics assertions regarding the origin of non-Markovian noise. It is an algorithmic and statistical audit of the public Google Willow dataset under the author's published analytical pipeline.
+
+\section{Implementation Provenance and Architecture}
+
+To ensure complete transparency regarding software provenance, our replication codebase~\cite{volmax_fano_audit_2026} is organized into three distinct operational layers, separating independent execution infrastructure from transcribed analytical operations:
+
+\begin{quote}
+\itshape
+``The primary detector decoding path is independently implemented; the statistical estimator on the analytical path deliberately transcribes the author's published operations under the preregistered design.''
+\end{quote}
+
+\begin{table}[h!]
+\centering
+\small
+\begin{tabularx}{\linewidth}{|l|X|l|}
+\hline
+\textbf{Provenance Layer} & \textbf{Component Description} & \textbf{Implementation Origin} \\
+\hline
+\textbf{Layer A} & Raw telemetry ingestion, directory traversal, and manifest hashing & Independent Reimplementation \\
+& Cryptographic SHA-256 verification (1,260 member files) & Independent Reimplementation \\
+& Premise invalidation gates ($P_1$–$P_5$) & Independent Reimplementation \\
+& Fast vectorized popcount decoder (\texttt{read\_detection\_counts\_fast}) & Independent Reimplementation \\
+& Automated decision and tolerance rules ($R_1$–$R_{10}$) & Independent Reimplementation \\
+& CI harness and byte-identical JSON reproduction engine & Independent Reimplementation \\
+\hline
+\textbf{Layer B} & Sample variance with Bessel correction (\texttt{ddof=1}) & Transcribed from Author Code \\
+(Analytical Path) & Per-experiment Fano factor computation ($F_i = s_i^2 / \bar{x}_i$) & Transcribed from Author Code \\
+& Aggregate sample mean and standard deviation & Transcribed from Author Code \\
+& One-sample $t$-statistic against $F=1$ & Transcribed from Author Code \\
+& Distance-stratified means and one-way ANOVA & Transcribed from Author Code \\
+\hline
+\textbf{Layer C} & Reference bit-shift popcount loop (\texttt{read\_detection\_counts\_author}) & Transcribed from Author Code \\
+(Off-Path Only) & Executed exclusively under \texttt{--verify-popcount} for bitwise equivalence & Reference / Invariant Check \\
+\hline
+\end{tabularx}
+\caption{Three-layer implementation provenance architecture of the replication audit.}
+\label{tab:provenance}
+\end{table}
+
+The primary detector reading pipeline in our audit (\texttt{read\_detection\_counts\_fast}) uses NumPy's vectorized byte unpacking (\texttt{np.unpackbits(..., bitorder="little")}), achieving a $>30\times$ speedup over byte-by-byte bit-shifting loops. Under the validation flag \texttt{--verify-popcount}, Layer~C runs the reference implementation across 10 distinct experiments, confirming 10/10 exact integer identity ($\Delta = 0$).
+
+\section{Preregistered Verification Pipeline}
+
+The replication was conducted according to a preregistration protocol (\texttt{PREREGISTRATION.md}, commit \texttt{ff84608}) committed prior to final ratification.
+
+\subsection{Premise and Invalidation Gates ($P_1$–$P_5$)}
+Before computing statistical summaries, the harness verifies five structural premises:
+\begin{itemize}
+    \item \textbf{$P_1$ (Input Completeness):} Exactly 420 experiment directories present in Zenodo archive 13273331.
+    \item \textbf{$P_2$ (Detector Stream Integrity):} Every admitted experiment contains valid \texttt{detection\_events.bstream} files.
+    \item \textbf{$P_3$ (Manifest Checksum):} SHA-256 digest of all 1,260 member files matches \texttt{manifest.sha256}.
+    \item \textbf{$P_4$ (Distance Coverage):} All specified distances $d \in \{3, 5, 7\}$ are represented.
+    \item \textbf{$P_5$ (Non-Zero Counts):} Mean detector event counts per experiment $\mu > 0$.
+\end{itemize}
+All five premises evaluated to \textbf{PASS}.
+
+\subsection{Decision Rules and Pre-Registered Tolerances}
+Mechanical decision rules ($R_1$–$R_{10}$) define exact acceptance criteria:
+\begin{itemize}
+    \item \textbf{$R_1$ ($W_1$ Mean Tolerance):} $|\bar{F}_{\text{recomputed}} - 2.42| < 0.005$.
+    \item \textbf{$R_2$ ($W_1$ Standard Deviation):} $|s_{\text{recomputed}} - 0.36| < 0.010$.
+    \item \textbf{$R_5$ ($W_2$ Distance Stratification):} $|\bar{F}_{d} - F_{d,\text{reported}}| < 0.005$ for each $d \in \{3, 5, 7\}$.
+    \item \textbf{$R_7$ ($W_3$ ANOVA $F$-statistic):} $|F_{\text{ANOVA}} - 59.1| \le 0.500$.
+    \item \textbf{$R_8$ ($W_4$ $t$-statistic):} $|t - 80.0| \le 2.000$.
+\end{itemize}
+
+\section{Replication Results}
+
+All numerical results were computed deterministically from raw detector bitstreams using \texttt{reproduce.py} and archived in \texttt{results/results.json}.
+
+\begin{table}[h!]
+\centering
+\small
+\begin{tabularx}{\linewidth}{|c|l|c|c|c|c|}
+\hline
+\textbf{Claim} & \textbf{Quantity} & \textbf{Reported} & \textbf{Recomputed} & \textbf{Absolute Delta $|\Delta|$} & \textbf{Verdict} \\
+\hline
+$W_1$ & Aggregate Mean $\bar{F}$ & $2.42$ & $2.4157$ & $0.0043$ & \textbf{Verified} \\
+$W_1$ & Sample Std.~Dev. $s$ & $0.36$ & $0.3620$ & $0.0020$ & \textbf{Verified} \\
+\hline
+$W_2$ & Distance $d=3$ Mean & $2.29$ & $2.2942$ ($N=270$) & $0.0042$ & \textbf{Verified} \\
+$W_2$ & Distance $d=5$ Mean & $2.59$ & $2.5935$ ($N=120$) & $0.0035$ & \textbf{Verified} \\
+$W_2$ & Distance $d=7$ Mean & $2.80$ & $2.7978$ ($N=30$) & $0.0022$ & \textbf{Verified} \\
+\hline
+$W_3$ & One-way ANOVA $F$ & $59.1$ & $59.1337$ & $0.0337$ & \textbf{Verified} \\
+$W_3$ & One-way ANOVA $p$-val & $\approx 0$ & $2.4624 \times 10^{-23}$ & --- & \textbf{Verified} \\
+\hline
+$W_4$ & One-sample $t$-stat & $+80.0$ & $+80.1510$ & $0.1510$ & \textbf{Verified} \\
+\hline
+\end{tabularx}
+\caption{Summary of numerical replication results against reported claims in Stenberg (2026).}
+\label{tab:results}
+\end{table}
+
+As shown in Table~\ref{tab:results}, every recomputed statistic falls well within the pre-registered tolerance bounds. The minor differences ($|\Delta| \le 0.0043$ for Fano means) are entirely attributable to rounding in the original manuscript's text and tables.
+
+\section{Epistemic Findings and Limitations}
+
+Beyond verifying arithmetic correctness, our audit identified two methodological and epistemic nuances:
+
+\subsection{Structural Zero-Power in Round Sensitivity Test}
+Rules $R_9$ and $R_{10}$ were designed to test sensitivity to QEC round duration by comparing native weighting against a round-uniform weighting $F_{\text{uniform, rounds}}$. The observed discrepancy was exactly zero:
+\begin{equation}
+|F_{\text{uniform, rounds}} - F_{\text{native}}| = 0.000000.
+\end{equation}
+Analysis of the raw archive revealed that Google's experimental design is perfectly balanced: exactly $N_r = 28$ experimental configurations exist for every round count $r \in \{1, 2, 3, 4, 5, 7, 9, 11, 13, 17, 21, 25, 33, 41, 250\}$. Consequently, the two weighting schemes are algebraically identical over this dataset. The test passed formally due to experimental design symmetry rather than demonstrating empirical round invariance.
+
+\subsection{Distance Composition Sensitivity}
+In the Google Willow public repository, distance $d=3$ accounts for $64.29\%$ of all experiments ($270/420$), $d=5$ for $28.57\%$ ($120/420$), and $d=7$ for only $7.14\%$ ($30/420$). If equal weighting is assigned to each code distance ($1/3$ per distance group), the aggregate mean shifts:
+\begin{equation}
+\bar{F}_{\text{distance-uniform}} = \frac{2.2942 + 2.5935 + 2.7978}{3} = 2.5618,
+\end{equation}
+a shift of $|\Delta| = 0.1461$ ($+6.0\%$). Thus, the headline aggregate value $F \approx 2.42$ strongly reflects the abundance of $d=3$ runs in the public archive rather than an equal-distance hardware average.
+
+\section{Conclusion and Code Availability}
+
+We have successfully replicated Claims~$W_1$–$W_4$ from Section~II\,F and Table~III of Stenberg (2026)~\cite{stenberg2026rotation}. The super-Poissonian Fano factors, distance monotonicity, ANOVA significance, and $t$-test statistics are robust, mathematically verified, and reproducible from raw telemetry bitstreams.
+
+The complete audit code, verification harness, and results are open source under the MIT License and permanently archived:
+\begin{itemize}
+    \item \textbf{Software Repository:} \url{https://github.com/VolMax-Studio/rotation-gap-fano-s1}
+    \item \textbf{Software Archive DOI:} \doi{10.5281/zenodo.22309778}~\cite{volmax_fano_audit_2026}
+    \item \textbf{Underlying Dataset DOI:} \doi{10.5281/zenodo.13273331}~\cite{willow_dataset_2024}
+\end{itemize}

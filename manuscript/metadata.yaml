@@ -1,28 +1,38 @@
-# ReScience C Submission Metadata
-# Schema: ReScience C official metadata v1.0
+# ReScience C official submission metadata
+# Schema: ReScience C official metadata v1.0 (parsed by article.py)
 
 title: '[Re] Partial Replication of the Willow Fano-Factor Results in "The Rotation Gap Is Not An Error"'
-title_short: '[Re] Partial Replication of Willow Fano-Factor Results'
-
-type: Replication
-
-repository:
-  url: https://github.com/VolMax-Studio/rotation-gap-fano-s1
-  doi: 10.5281/zenodo.22309778
 
 authors:
   - name: Ivan Nestorov
     orcid: 0009-0006-7940-9539
     email: volmax.core@gmail.com
-    affiliations:
-      - 1,*
+    affiliations: 1,*
 
 affiliations:
-  - name: VolMax Studio Lab, Belgrade, Serbia
-    code: 1
+  - code: 1
+    name: VolMax Studio Lab
+    address: Belgrade, Serbia
+
+keywords: quantum error correction, surface codes, google willow, fano factor, replication, python
+
+code:
+  - url: https://github.com/VolMax-Studio/rotation-gap-fano-s1
+  - doi: 10.5281/zenodo.22309778
+  - swh:
+
+data:
+  - url: https://doi.org/10.5281/zenodo.13273331
+  - doi: 10.5281/zenodo.13273331
+
+replication:
+  - cite: "Stenberg, S. (2026). The Rotation Gap Is Not An Error — Ternary Structure in IBM Quantum Hardware. arXiv:2604.11963v1 [quant-ph]."
+    bib: stenberg2026rotation
+    url: https://arxiv.org/abs/2604.11963
+    doi: 10.48550/arXiv.2604.11963
 
 abstract: |
-  We present an independent, pre-registered partial replication of the empirical quantum error-correction
+  We present a pre-registered partial replication of the empirical quantum error-correction
   detector statistics reported in Section II F and Table III of Stenberg (2026, arXiv:2604.11963v1).
   Analyzing raw detector bitstream records from the 105-qubit Google Willow archive (Zenodo DOI:
   10.5281/zenodo.13273331, 420 experiments across code distances d in {3, 5, 7}), we recompute
@@ -40,37 +50,38 @@ abstract: |
   finding demonstrating that equal-distance weighting shifts the mean Fano factor from 2.42 to 2.56 due to
   the predominant representation of d=3 experiments (64.3%) in the public repository.
 
-replication:
-  cite: "Stenberg, S. (2026). The Rotation Gap Is Not An Error — Ternary Structure in IBM Quantum Hardware. arXiv:2604.11963v1 [quant-ph]."
-  bib_id: stenberg2026rotation
-  url: https://arxiv.org/abs/2604.11963
-  doi: https://doi.org/10.48550/arXiv.2604.11963
-
-software:
-  language: Python 3.12
-  dependencies:
-    - numpy >= 1.26.0
-    - scipy >= 1.12.0
-  environment: requirements-minimal.txt
-
-dates:
-  received: September 6, 2026
-  accepted:
-  published:
+bibliography: bibliography.bib
+type: Replication
+domain: Quantum Computation and Statistical Physics
+language: Python
 
 review:
-  url: https://github.com/ReScience/submissions/issues/127
-  editor: Nicolas P. Rougier
-  reviewers:
+  - url: https://github.com/ReScience/submissions/issues/127
+  - doi:
+
+contributors:
+  - role: editor
+    name: Nicolas P. Rougier
+    orcid: 0000-0002-6972-589X
+  - role: reviewer
+    name:
+    orcid:
+  - role: reviewer
+    name:
+    orcid:
+
+dates:
+  - received: September 6, 2026
+  - accepted:
+  - published:
 
 article:
-  number:
-  doi:
-  volume:
-  issue:
-  url:
+  - number:
+  - doi:
+  - url:
 
 journal:
-  name: "ReScience C"
-  issn: 2430-3658
-  publisher: "ReScience C"
+  - name: "ReScience C"
+    issn: 2430-3658
+    volume:
+    issue:
