@@ -51,8 +51,8 @@ Infrastructure) & Step 0 premise checking harness and halting invalidation gates
 (Author-Derived & Detector count parsing from Stim circuit string (\texttt{count\_detectors}) & Author Convention (\texttt{willow\_fano\_analysis.py}) \\
 on Analytical & Sample variance with Bessel correction (\texttt{ddof=1}) & Transcribed from Author Script (§2) \\
 Path) & Per-experiment Fano factor computation ($F_i = s_i^2 / \bar{x}_i$) & Transcribed from Author Script (§2) \\
-& Aggregate sample mean ($\bar{F}$) and standard deviation ($s$) & Transcribed from Author Script (§2) \\
-& One-sample $t$-statistic against $F=1$ ($t = (\bar{F} - 1) / (s / \sqrt{N})$) & Transcribed from Author Script (§2) \\
+& Aggregate mean ($\bar{F}$) and population standard deviation of $F_i$ ($\sigma_F$) & Transcribed from Author Script (§2) \\
+& One-sample $t$-statistic against $F=1$ ($t = (\bar{F} - 1) / (\sigma_F / \sqrt{N})$) & Transcribed from Author Script (§2) \\
 & Distance-stratified means and one-way ANOVA ($F$-statistic, $p$-value) & Transcribed from Author Script (§2) \\
 \hline
 \textbf{Layer C} & Reference bit-shift popcount loop (\texttt{read\_detection\_counts\_author}) & Transcribed from Author Script \\
