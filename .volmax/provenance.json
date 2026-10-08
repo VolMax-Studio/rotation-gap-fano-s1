@@ -1,0 +1,27 @@
+{
+  "baseline_commit": "bb5e68b93ed314289f55d37544df2a65c25e2116",
+  "baseline_tree": "1874f817a8418595558b8b6264e2683704599116",
+  "behavior": {
+    "callbacks": false,
+    "executable": false,
+    "network_calls": false,
+    "telemetry": false
+  },
+  "canonical_url": "https://github.com/VolMax-Studio/rotation-gap-fano-s1",
+  "default_branch_at_recording": "main",
+  "license": {
+    "detected_spdx": "MIT",
+    "files": [
+      "LICENSE"
+    ],
+    "note": "This provenance record does not grant or alter license rights."
+  },
+  "owner": "VolMax-Studio",
+  "record_id": "urn:volmax:github:VolMax-Studio/rotation-gap-fano-s1:bb5e68b93ed314289f55d37544df2a65c25e2116",
+  "record_type": "volmax.repository-provenance",
+  "record_version": 1,
+  "recorded_at": "2026-10-08T19:40:21+00:00",
+  "repository": "VolMax-Studio/rotation-gap-fano-s1",
+  "schema": "urn:volmax:provenance:v1",
+  "scope": "Repository identity and baseline commit only; historical tags, releases, evidence, authorship, and existing file bytes are unchanged."
+}
